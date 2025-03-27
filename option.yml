@@ -1,0 +1,41 @@
+client:
+  cache: null
+  domain: []
+  impl: api
+  postman:
+    meta_data:
+      headers: null
+      impersonate: chrome110
+      proxies: {system}
+    type: cffi
+  retry_times: 5
+dir_rule:
+  # 该处为你clone的本地仓库地址
+  base_dir: D:\Library\Repository\JMComic-Crawler-Python
+  rule: Bd_Pname
+download:
+  cache: true
+  image:
+    decode: true
+    suffix: null
+  threading:
+    # 修改了默认配置，如无必要请删除
+    image: 8
+    photo: 4
+log: true
+plugins:
+  valid: log
+  after_album:
+  - plugin: zip # 压缩文件插件
+    kwargs:
+      level: photo # 按照章节，一个章节一个压缩文件
+      # level 也可以配成 album，表示一个本子对应一个压文件，该压缩文件会包含这个本子的所有章节
+      filename_rule: Ptitle
+      # 请注意⚠ [https://github.com/hect0x7JMComic-Crawler-Python/issues223#issuecomment-2045227527]
+      # filename_rule和level有对应关系
+      # 如果level=[photo], filename_rule只能写Pxxx
+      # 如果level=[album], filename_rule只能写Axxx
+      # 该处路径为希望压缩文件存放的文件夹，请自行修改
+      zip_dir: D:/Files/Comic/本子/Auto_Download # 压缩文件存放的文件夹
+      delete_original_file: true # 压缩成功后，删除所有原文件和文件夹
+version: '2.1'
