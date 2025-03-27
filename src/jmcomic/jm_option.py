@@ -159,6 +159,7 @@ class DirRule:
             return None
 
         def solve_func(detail):
+            # 添加ID，如无必要，请删除：“detail.id +' '+ ”
             return fix_windir_name(detail.id +' '+ str(DetailEntity.get_dirname(detail, rule[1:]))).strip()
 
         return rule[0], solve_func, rule
