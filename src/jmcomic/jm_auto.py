@@ -12,7 +12,7 @@ class FileChangeHandler(FileSystemEventHandler):
         super().__init__()
         self.target_filename = target_filename
         # 延迟处理的秒数
-        self.delay = 20
+        self.delay = 120
         # 用于控制延迟处理的计时器
         self.timer = None
         # 线程锁防止资源竞争
