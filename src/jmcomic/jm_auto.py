@@ -53,7 +53,7 @@ class FileChangeHandler(FileSystemEventHandler):
                 id_value = line
                 # 在此添加自定义逻辑（如调用API、写入数据库等）
                 # 注意配置文件路径，默认为项目根目录
-                jmcomic.create_option_by_file('../../option.yml').download_album(id_value)
+                jmcomic.create_option_by_file('D:\Library\Repository\JMComic-Crawler-Python\option.yml').download_album(id_value)
 
                 processed_lines.append(line)
         
@@ -70,7 +70,7 @@ class FileChangeHandler(FileSystemEventHandler):
 
 if __name__ == "__main__":
     # 要监控的文件路径
-    FILE_PATH = "../../pack.txt"
+    FILE_PATH = "D:\Library\Repository\JMComic-Crawler-Python\pack.txt"
     # 获取绝对路径和目录
     target_abspath = os.path.abspath(FILE_PATH)
     target_dir = os.path.dirname(target_abspath)
