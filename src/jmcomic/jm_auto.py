@@ -2,7 +2,7 @@ import time
 import os
 import re
 import threading
-from watchdog.observers import Observer
+from watchdog.observers.polling import PollingObserver
 from watchdog.events import FileSystemEventHandler
 import jmcomic
 import logging
@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     event_handler = FileChangeHandler(target_filename)
     # 实例化Observer对象，设置监控路径和是否递归监控子目录（recursive=False表示不递归）
-    observer = Observer()
+    observer = PollingObserver()
     observer.schedule(event_handler, path=target_dir, recursive=False)
     observer.start()
     logging.info(f"开始监控文件: {target_abspath}")
