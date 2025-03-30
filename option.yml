@@ -6,7 +6,7 @@ client:
     meta_data:
       headers: null
       impersonate: chrome110
-      proxies: {system}
+      proxies: system
     type: cffi
   retry_times: 5
 dir_rule:
@@ -18,8 +18,8 @@ download:
   image:
     decode: true
     suffix: null
+  # 修改了默认配置，如无必要请删除（删除时请务必整段删除）
   threading:
-    # 修改了默认配置，如无必要请删除
     image: 8
     photo: 4
 log: true
