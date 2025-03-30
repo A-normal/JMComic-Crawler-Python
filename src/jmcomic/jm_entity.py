@@ -154,20 +154,14 @@ class DetailEntity(JmBaseEntity, IndexedEntity):
         :param ref: 字段名
         :returns: 文件夹名
         """
-        # 此处修改对windows本地运行可用，但对docker无效，原因未知
-        # # 添加自定义章节标题
-        # from jmcomic import JmModuleConfig
-        # JmModuleConfig.PFIELD_ADVICE['idname'] = lambda photo: f'{photo.id} {photo.title}'
-
-        # advice_func = (JmModuleConfig.AFIELD_ADVICE
-        #         if isinstance(detail, JmAlbumDetail)
-        #         else JmModuleConfig.PFIELD_ADVICE
-        #         ).get('idname', None)
+        # 添加自定义章节标题
+        from jmcomic import JmModuleConfig
+        JmModuleConfig.PFIELD_ADVICE['idname'] = lambda photo: f'{photo.id} {photo.title}'
 
         advice_func = (JmModuleConfig.AFIELD_ADVICE
-                       if isinstance(detail, JmAlbumDetail)
-                       else JmModuleConfig.PFIELD_ADVICE
-                       ).get(ref, None)
+                if isinstance(detail, JmAlbumDetail)
+                else JmModuleConfig.PFIELD_ADVICE
+                ).get('idname', None)
 
         if advice_func is not None:
             return advice_func(detail)
