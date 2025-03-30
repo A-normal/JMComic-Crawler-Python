@@ -5,6 +5,8 @@ from .jm_option import *
 class DownloadCallback:
 
     def before_album(self, album: JmAlbumDetail):
+        # 添加本子ID至名字
+        album.name = album.id + ' ' + album.name
         jm_log('album.before',
                f'本子获取成功: [{album.id}], '
                f'作者: [{album.author}], '
@@ -18,6 +20,8 @@ class DownloadCallback:
         jm_log('album.after', f'本子下载完成: [{album.id}]')
 
     def before_photo(self, photo: JmPhotoDetail):
+        # 添加章节ID至名字
+        photo.name = photo.id + ' ' + photo.name
         jm_log('photo.before',
                f'开始下载章节: {photo.id} ({photo.album_id}[{photo.index}/{len(photo.from_album)}]), '
                f'标题: [{photo.name}], '
