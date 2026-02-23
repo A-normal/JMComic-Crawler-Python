@@ -62,13 +62,16 @@ class JmImageResp(JmResp):
                     img_url=None,
                     ):
         img_url = img_url or self.url
+        index = img_url.find("?")
+        if index != -1:
+            img_url = img_url[0:index]
 
         if decode_image is False or scramble_id is None:
             # 不解密图片，直接保存文件
             JmImageTool.save_resp_img(
                 self,
                 path,
-                need_convert=suffix_not_equal(img_url[:img_url.find("?")], path),
+                need_convert=suffix_not_equal(img_url, path),
             )
         else:
             # 解密图片并保存文件
@@ -98,6 +101,14 @@ class JmApiResp(JmJsonResp):
         super().__init__(resp)
         self.ts = ts
 
+    # 重写json()方法，可以忽略一些非json格式的脏数据
+    @field_cache()
+    def json(self) -> Dict:
+        try:
+            return JmcomicText.try_parse_json_object(self.resp.text)
+        except Exception as e:
+            ExceptionTool.raises_resp(f'json解析失败: {e}', self, JsonResolveFailException)
+
     @property
     def is_success(self) -> bool:
         return super().is_success and self.json()['code'] == 200
@@ -111,17 +122,23 @@ class JmApiResp(JmJsonResp):
     def encoded_data(self) -> str:
         return self.json()['data']
 
+    def require_have_data(self):
+        data = self.encoded_data
+        if isinstance(data, list) and len(data) == 0 and self.json().get('errorMsg', None):
+            ExceptionTool.raises_resp(f'data返回值异常: {self.text}', self)
+
     @property
     def res_data(self) -> Any:
         self.require_success()
+        self.require_have_data()
         from json import loads
         return loads(self.decoded_data)
 
     @property
     def model_data(self) -> AdvancedDict:
         self.require_success()
+        self.require_have_data()
         return AdvancedDict(self.res_data)
-
 
 # album-comment
 class JmAlbumCommentResp(JmJsonResp):
@@ -281,6 +298,14 @@ class JmImageClient:
 
         # https://cdn-msp2.18comic.vip/media/photos/498976/00027.gif
         return data_original.endswith('.gif')
+
+    def download_album_cover(self, album_id, save_path: str, size: str = ''):
+        self.download_image(
+            img_url=JmcomicText.get_album_cover_url(album_id, size=size),
+            img_save_path=save_path,
+            scramble_id=None,
+            decode_image=False,
+        )
 
 
 class JmSearchAlbumClient:

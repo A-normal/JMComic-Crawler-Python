@@ -1,14 +1,43 @@
-# Python API For JMComic (禁漫天堂)
+<!-- 顶部标题 & 统计徽章 -->
+<div align="center">
+  <h1 style="margin-top: 0" align="center">Python API for JMComic</h1>
 
-本项目封装了一套可用于爬取JM的Python API.
+  <p align="center">
+    <strong>简体中文</strong> •
+    <a href="./assets/readme/README-en.md">English</a> •
+    <a href="./assets/readme/README-jp.md">日本語</a> •
+    <a href="./assets/readme/README-kr.md">한국어</a>
+  </p>
 
-你可以通过简单的几行Python代码，实现下载JM上的本子到本地，并且是处理好的图片。
+  <p align="center">
+  <strong>提供 Python API 访问禁漫天堂（网页端 & 移动端），集成 GitHub Actions 下载器🚀</strong>
+  </p>
+
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github)](https://github.com/hect0x7)
+[![Stars](https://img.shields.io/github/stars/hect0x7/JMComic-Crawler-Python?color=orange&label=stars&style=flat)](https://github.com/hect0x7/JMComic-Crawler-Python/stargazers)
+[![Forks](https://img.shields.io/github/forks/hect0x7/JMComic-Crawler-Python?color=green&label=forks&style=flat)](https://github.com/hect0x7/JMComic-Crawler-Python/forks)
+[![GitHub latest releases](https://img.shields.io/github/v/release/hect0x7/JMComic-Crawler-Python?color=blue&label=version)](https://github.com/hect0x7/JMComic-Crawler-Python/releases/latest)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/jmcomic?style=flat&color=hotpink)](https://pepy.tech/projects/jmcomic)
+[![Licence](https://img.shields.io/github/license/hect0x7/JMComic-Crawler-Python?color=red)](https://github.com/hect0x7/JMComic-Crawler-Python)
+
+</div>
+
+
+
+
+> 本项目封装了一套可用于爬取JM的Python API.
+> 
+> 你可以通过简单的几行Python代码，实现下载JM上的本子到本地，并且是处理好的图片。
+> 
+> **友情提示：珍爱JM，为了减轻JM的服务器压力，请不要一次性爬取太多本子，西门🙏🙏🙏**.
 
 [【指路】教程：使用GitHub Actions下载禁漫本子](./assets/docs/sources/tutorial/1_github_actions.md)
 
 [【指路】教程：导出并下载你的禁漫收藏夹数据](./assets/docs/sources/tutorial/10_export_favorites.md)
 
-**友情提示：珍爱JM，为了减轻JM的服务器压力，请不要一次性爬取太多本子，西门🙏🙏🙏**.
+
+![introduction.jpg](./assets/docs/sources/images/introduction.jpg)
+
 
 ## 项目介绍
 
@@ -35,7 +64,7 @@
 * 通过pip官方源安装（推荐，并且更新也是这个命令）
 
   ```shell
-  pip install jmcomic -i https://pypi.org/project -U
+  pip install jmcomic -U
   ```
 * 通过源代码安装
 
@@ -47,11 +76,11 @@
 
 ### 1. 下载本子方法
 
-只需要使用如下代码，就可以下载本子`JM422866`的所有章节的图片：
+只需要使用如下代码，就可以下载本子`JM123`的所有章节的图片：
 
 ```python
 import jmcomic  # 导入此模块，需要先安装.
-jmcomic.download_album('422866')  # 传入要下载的album的id，即可下载整个album到本地.
+jmcomic.download_album('123')  # 传入要下载的album的id，即可下载整个album到本地.
 ```
 
 上面的 `download_album`方法还有一个参数`option`，可用于控制下载配置，配置包括禁漫域名、网络代理、图片格式转换、插件等等。
@@ -80,8 +109,8 @@ import jmcomic
 # 创建配置对象
 option = jmcomic.create_option_by_file('你的配置文件路径，例如 D:/option.yml')
 # 使用option对象来下载本子
-jmcomic.download_album(422866, option)
-# 等价写法: option.download_album(422866)
+jmcomic.download_album(123, option)
+# 等价写法: option.download_album(123)
 ```
 
 ### 3. 使用命令行
@@ -91,10 +120,10 @@ jmcomic.download_album(422866, option)
 
 示例：
 
-下载本子422866的命令
+下载本子123的命令
 
 ```sh
-jmcomic 422866
+jmcomic 123
 ```
 同时下载本子123, 章节456的命令
 ```sh
@@ -142,7 +171,7 @@ jmcomic 123
 
   - 不配置也能使用，十分方便
   - 配置可以从配置文件生成，支持多种文件格式
-  - 配置点有：`请求域名` `客户端实现` `是否使用磁盘缓存` `同时下载的章节/图片数量` `图片格式转换` `下载路径规则` `请求元信息（headers,cookies,proxies）`
+  - 配置点有：`请求域名` `客户端实现` `是否使用磁盘缓存` `同时下载的章节/图片数量` `图片格式转换` `下载路径规则` `请求元信息（headers,cookies,proxies)` `中文繁/简转换` 
     等
 - **可扩展性强**
 
@@ -154,17 +183,25 @@ jmcomic 123
     - `硬件占用监控插件`
     - `只下载新章插件`
     - `压缩文件插件`
+    - `客户端代理插件`
     - `下载特定后缀图片插件`
     - `发送QQ邮件插件`
-    - `自动使用浏览器cookies插件`
-    - `jpg图片合成为一个pdf插件`
+    - `日志主题过滤插件`
+    - `自动获取浏览器cookies插件`
     - `导出收藏夹为csv文件插件`
     - `合并所有图片为pdf文件插件`
-    - `合并所有图片为长图插件`
+    - `合并所有图片为长图png插件`
+    - `网页观看本地章节插件`
+    - `订阅更新插件`
+    - `小章节跳过插件`
+    - `重复文件检测删除插件`
+    - `路径字符串替换插件`
+    - `高级重试插件`
+    - `封面下载插件`
 
 ## 使用小说明
 
-* Python >= 3.7
+* Python >= 3.7，建议3.9以上，因为jmcomic的依赖库可能会不支持3.9以下的版本。
 * 个人项目，文档和示例会有不及时之处，可以Issue提问
 
 ## 项目文件夹介绍

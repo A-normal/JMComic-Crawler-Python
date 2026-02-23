@@ -2,16 +2,6 @@
 
 
 
-下方所有函数都省略了如下的导包和准备代码
-
-```python
-from jmcomic import *
-option = JmOption.default()
-client: JmcomicClient = option.build_jm_client()
-```
-
-
-
 ## 自定义下载前后的回调函数
 
 ```python
@@ -102,6 +92,8 @@ def custom_album_photo_image_detail_class():
     dir_rule:
         base_dir: ${workspace}
         rule: Bd_Acustom_Pcustom
+        # 可选：对目录名进行繁/简体规范化（None/zh-cn/zh-tw），默认不启用
+        # normalize_zh: zh-cn
     
     上面的Acustom，Pcustom都是自定义字段
     如果你想要使用这种自定义字段，你就需要替换默认的实体类，方式如下
@@ -149,8 +141,8 @@ def custom_jm_log():
     """
 
     # jmcomic模块在运行过程中会使用 jm_log() 这个函数进行打印信息
-    # jm_log() 这个函数 最后会调用 JmModuleConfig.log_executor 函数
-    # 你可以写一个自己的函数，替换 JmModuleConfig.log_executor，实现自定义log
+    # jm_log() 这个函数 最后会调用 JmModuleConfig.EXECUTOR_LOG 函数
+    # 你可以写一个自己的函数，替换 JmModuleConfig.EXECUTOR_LOG，实现自定义log
     
     # 1. 自定义log函数
     def my_log(topic: str, msg: str):
@@ -162,8 +154,9 @@ def custom_jm_log():
         pass
     
     # 2. 让my_log生效
-    JmModuleConfig.log_executor = my_log
+    JmModuleConfig.EXECUTOR_LOG = my_log
 ```
+
 
 
 

@@ -21,6 +21,9 @@ class JmMagicConstants:
     ORDER_BY_VIEW = 'mv'
     ORDER_BY_PICTURE = 'mp'
     ORDER_BY_LIKE = 'tf'
+    # 下面这两个目前只在网页上看到，app上没有
+    ORDER_BY_SCORE = 'tr'
+    ORDER_BY_COMMENT = 'md'
 
     ORDER_MONTH_RANKING = 'mv_m'
     ORDER_WEEK_RANKING = 'mv_w'
@@ -76,7 +79,8 @@ class JmMagicConstants:
     APP_TOKEN_SECRET = '18comicAPP'
     APP_TOKEN_SECRET_2 = '18comicAPPContent'
     APP_DATA_SECRET = '185Hcomic3PAPP7R'
-    APP_VERSION = '1.7.8'
+    API_DOMAIN_SERVER_SECRET = 'diosfjckwpqpdfjkvnqQjsik'
+    APP_VERSION = '2.0.18'
 
 
 # 模块级别共用配置
@@ -84,7 +88,7 @@ class JmModuleConfig:
     # 网站相关
     PROT = "https://"
     JM_REDIRECT_URL = f'{PROT}jm365.work/3YeBdF'  # 永久網域，怕走失的小伙伴收藏起来
-    JM_PUB_URL = f'{PROT}jmcomic-fb.vip'
+    JM_PUB_URL = f'{PROT}jmcomicgo.org'
     JM_CDN_IMAGE_URL_TEMPLATE = PROT + 'cdn-msp.{domain}/media/photos/{photo_id}/{index:05}{suffix}'  # index 从1开始
     JM_IMAGE_SUFFIX = ['.jpg', '.webp', '.png', '.gif']
 
@@ -127,10 +131,18 @@ class JmModuleConfig:
 
     # 移动端API域名
     DOMAIN_API_LIST = shuffled('''
-    www.jmapiproxyxxx.vip
-    www.cdnblackmyth.vip
-    www.cdnblackmyth.xyz
-    www.cdnxxx-proxy.co
+    www.cdnaspa.vip
+    www.cdnaspa.club
+    www.cdnplaystation6.vip
+    www.cdnplaystation6.cc
+    ''')
+
+    DOMAIN_API_UPDATED_LIST = None
+
+    # 获取最新移动端API域名的地址
+    API_URL_DOMAIN_SERVER_LIST = shuffled('''
+    https://rup4a04-c01.tos-ap-southeast-1.bytepluses.com/newsvr-2025.txt
+    https://rup4a04-c02.tos-cn-hongkong.bytepluses.com/newsvr-2025.txt
     ''')
 
     APP_HEADERS_TEMPLATE = {
@@ -141,7 +153,7 @@ class JmModuleConfig:
 
     APP_HEADERS_IMAGE = {
         'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-        'X-Requested-With': 'com.jiaohua_browser',
+        'X-Requested-With': 'com.JMComic3.app',
         'Referer': PROT + DOMAIN_API_LIST[0],
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
@@ -200,6 +212,8 @@ class JmModuleConfig:
     FLAG_USE_FIX_TIMESTAMP = True
     # 移动端Client初始化cookies
     FLAG_API_CLIENT_REQUIRE_COOKIES = True
+    # 自动更新禁漫API域名
+    FLAG_API_CLIENT_AUTO_UPDATE_DOMAIN = True
     # log开关标记
     FLAG_ENABLE_JM_LOG = True
     # log时解码url
@@ -380,7 +394,7 @@ class JmModuleConfig:
 
     @classmethod
     def new_postman(cls, session=False, **kwargs):
-        kwargs.setdefault('impersonate', 'chrome110')
+        kwargs.setdefault('impersonate', 'chrome')
         kwargs.setdefault('headers', JmModuleConfig.new_html_headers())
         kwargs.setdefault('proxies', JmModuleConfig.DEFAULT_PROXIES)
 
@@ -401,7 +415,7 @@ class JmModuleConfig:
 
     DEFAULT_OPTION_DICT: dict = {
         'log': None,
-        'dir_rule': {'rule': 'Bd_Pname', 'base_dir': None},
+        'dir_rule': {'rule': 'Bd_Pname', 'base_dir': None, 'normalize_zh': None},
         'download': {
             'cache': True,
             'image': {'decode': True, 'suffix': None},
@@ -414,9 +428,9 @@ class JmModuleConfig:
             'cache': None,  # see CacheRegistry
             'domain': [],
             'postman': {
-                'type': 'cffi',
+                'type': 'curl_cffi',
                 'meta_data': {
-                    'impersonate': 'chrome110',
+                    'impersonate': 'chrome',
                     'headers': None,
                     'proxies': None,
                 }
